@@ -1,0 +1,68 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Model\Entity;
+
+use Cake\ORM\Entity;
+
+class Competition extends Entity
+{
+    protected array $_accessible = [
+        'access_id' => true,
+        'name' => true,
+        'subtitle' => true,
+        'place' => true,
+        'organizer' => true,
+        'status' => true,
+        'event_date' => true,
+        'competition_start' => true,
+        'competition_end' => true,
+        'filling_start' => true,
+        'pipe' => true,
+        'tobacco' => true,
+        'chief_referee' => true,
+        'competition_director' => true,
+        'person3' => true,
+        'last_master_pc' => true,
+        'diploma_name1' => true,
+        'diploma_name2' => true,
+        'diploma_name3' => true,
+        'diploma_name4' => true,
+        'diploma_role1' => true,
+        'diploma_role2' => true,
+        'diploma_role3' => true,
+        'diploma_role4' => true,
+        'diploma_text1' => true,
+        'diploma_text2' => true,
+        'teams_enabled' => true,
+        'payment_tracking' => true,
+        'tables_tracking' => true,
+        'competition_active' => true,
+        'competition_finished' => true,
+        'registration_closed' => true,
+        'auto_register' => true,
+        'filling_active' => true,
+        'filling_finished' => true,
+        'preprinted_cards' => true,
+        'world_class' => true,
+        'max_registration_number' => true,
+        'max_competition_number' => true,
+        'team_num_min' => true,
+        'team_num_max' => true,
+        'team_num_eval' => true,
+        'competitor_card_type' => true,
+        'fee_currency' => true,
+        'vl_individuals_id' => true,
+        'vl_teams_id' => true,
+        'vl_women_id' => true,
+        'published_competition_id' => true,
+        'logo_competition' => true,
+        'logo_club' => true,
+        'created' => true,
+        'modified' => true,
+        'teams' => true,
+        'seating_tables' => true,
+        'registrations' => true,
+        'competition_locks' => true,
+    ];
+}

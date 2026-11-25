@@ -1,0 +1,34 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Model\Table;
+
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+class SeatingTablesTable extends Table
+{
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('seating_tables');
+        $this->setDisplayField('number');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Competitions', ['foreignKey' => 'competition_id']);
+    }
+
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->integer('access_id')
+            ->requirePresence('access_id', 'create')
+            ->notEmptyString('access_id')
+            ->add('access_id', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+
+        return $validator;
+    }
+}

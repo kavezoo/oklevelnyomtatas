@@ -1,0 +1,114 @@
+/* SmokeTimer — JeffAdmin kiegészítők (szöveg + gombok ne fedje egymást) */
+
+body.app .smoketimer-flash-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+}
+
+body.app .smoketimer-flash-stack .smoketimer-flash {
+  margin: 0;
+  border-left-width: 4px;
+}
+
+body.app .smoketimer-flash__icon {
+  font-size: 1.15rem;
+  opacity: 0.9;
+}
+
+body.app .smoketimer-flash__text {
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+body.app .alert-success .alert-link {
+  color: #0a3622;
+  text-decoration: underline;
+}
+
+body.app .smoketimer-toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+@media (min-width: 576px) {
+  body.app .smoketimer-toolbar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+body.app .smoketimer-toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (min-width: 576px) {
+  body.app .smoketimer-toolbar__actions {
+    margin-left: auto;
+  }
+}
+
+body.app .registration-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+body.app .registration-list .form-check {
+  margin-bottom: 0;
+  min-height: auto;
+  align-items: flex-start;
+}
+
+body.app .registration-list .form-check-label {
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+body.app .table-data2 td.filename-col {
+  white-space: normal;
+  word-break: break-word;
+  max-width: 36rem;
+}
+
+body.app .table-data2 td.action .table-data-feature {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}
+
+/* Fejléc kereső: mobil+asztal, JeffAdmin mobil-hide felülírás */
+body.app .header-desktop .smoketimer-header-search.form-header {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-left: 0.75rem;
+}
+
+body.app .header-desktop .form-header__hint {
+  font-size: 0.7rem;
+}
+
+body.app .table-data2 th.access-id-col,
+body.app .table-data2 td.access-id-col {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+body.app .card-body .btn {
+  white-space: normal;
+  text-align: center;
+}
+
+@media (min-width: 576px) {
+  body.app .card-body .btn {
+    white-space: nowrap;
+  }
+}
