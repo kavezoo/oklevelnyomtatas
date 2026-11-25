@@ -207,7 +207,7 @@ Használati részletek: [hasznalat.md](hasznalat.md).
 | Adatbázis kapcsolat hiba | Ellenőrizd: MySQL fut, név `oklevelnyomtatas`, `app_local.php` |
 | 404 / üres oldal Apache-nál | `mod_rewrite`, DocumentRoot = `webroot` |
 | Access import nem megy | ACE telepítés; PHP és ACE egyaránt 32 vagy 64 bit |
-| Feltöltés timeout | `Doc/uzemeltetoi/telepites-es-hasznalat-xampp.md` — `php.ini` limiték |
+| Feltöltés timeout | `doc/uzemeltetoi/telepites-es-hasznalat-xampp.md` — `php.ini` limiték |
 
 ---
 

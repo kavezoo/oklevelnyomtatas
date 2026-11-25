@@ -24,9 +24,9 @@ Opcionálisan címkézett kiadás: GitHub **Releases** → letöltés, vagy `git
 
 | Dokumentum | Cél |
 |------------|-----|
-| [**Egyszerű telepítés**](Doc/uzemeltetoi/telepites-gyors-utmutato.md) | Lépésről lépésre: letöltések, séma (**SQL** vagy **migráció**), indítás böngészőben |
-| [Telepítés és használat (XAMPP)](Doc/uzemeltetoi/telepites-es-hasznalat-xampp.md) | Részletes: Composer, MySQL, Apache, lokális domain, Access ODBC, php.ini |
-| [Használat — rövid áttekintés](Doc/uzemeltetoi/hasznalat.md) | Tipikus munkafolyamat a telepítés után (import, oklevelek, PDF) |
+| [**Egyszerű telepítés**](doc/uzemeltetoi/telepites-gyors-utmutato.md) | Lépésről lépésre: letöltések, séma (**SQL** vagy **migráció**), indítás böngészőben |
+| [Telepítés és használat (XAMPP)](doc/uzemeltetoi/telepites-es-hasznalat-xampp.md) | Részletes: Composer, MySQL, Apache, lokális domain, Access ODBC, php.ini |
+| [Használat — rövid áttekintés](doc/uzemeltetoi/hasznalat.md) | Tipikus munkafolyamat a telepítés után (import, oklevelek, PDF) |
 
 **Adatbázis:** MySQL/MariaDB név `oklevelnyomtatas` — séma **kétféleképpen:** `config/schema/oklevelnyomtatas.sql` import, vagy `php bin/cake.php migrations migrate` (részletek a telepítési doksiban; a két módszert ne kombináld ugyanazon az üres/félkész adatbázison).
 
