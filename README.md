@@ -1,4 +1,4 @@
-# oklevelnyomtatas
+# Oklevélnyomtatás
 
 Webes alkalmazás pipázóverseny-adatokból **PDF oklevelek** és **eredménylisták** nyomtatásához: a SmokeTimer **Microsoft Access** állomány (`SmokeTimerDB.accdb`) importálható **MySQL**-be, innen kezelhető a versenyadat, generálhatók az oklevelek és listák.
 
