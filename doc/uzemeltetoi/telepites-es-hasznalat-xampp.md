@@ -1,6 +1,6 @@
 - **Típus:** üzemeltetői
 - **Alkalmazás:** oklevelnyomtatas
-- **Verzió:** 1.1
+- **Verzió:** 1.2
 - **Dátum:** 2026-11-25
 - **Állapot:** érvényes
 - **Felelős:** oklevelnyomtatas fejlesztés
@@ -9,7 +9,7 @@
 
 ## Cél
 
-Az **oklevelnyomtatas** webalkalmazás üzembe helyezése fejlesztői / helyi környezetben: **Apache + PHP 8.2+ + MySQL**, adatbázis séma az **`config/schema/oklevelnyomtatas.sql`** fájlból, SmokeTimer Access állomány olvasása **ODBC**-vel.
+Az **oklevelnyomtatas** webalkalmazás üzembe helyezése helyi vagy éles környezetben: **Apache + PHP 8.2+ + MySQL**, adatbázis séma **SQL importtal** vagy **CakePHP migrációval**, SmokeTimer Access állomány olvasása **ODBC**-vel.
 
 **Gyors telepítés (lépésről lépésre):** [telepites-gyors-utmutato.md](telepites-gyors-utmutato.md)
 
@@ -18,13 +18,12 @@ Az **oklevelnyomtatas** webalkalmazás üzembe helyezése fejlesztői / helyi k�
 | Mező | Érték |
 |------|--------|
 | **Tároló** | [https://github.com/kavezoo/oklevelnyomtatas.git](https://github.com/kavezoo/oklevelnyomtatas.git) |
-| **Fejlesztői ág** | `dev` (jelenleg innen telepíthető) |
-| **Stabil ág** | `main` — későbbi, végleges használható változat; innen lesz **release** is |
+| **Éles ág** | `main` — innen telepíts |
+| **Kiadás** | Az első és további **release** a repó feltöltése után a GitHub **Releases** oldalon |
 
 ```bat
 git clone https://github.com/kavezoo/oklevelnyomtatas.git
 cd oklevelnyomtatas
-git checkout dev
 ```
 
 **Munkakönyvtár példa:** `D:\www\oklevelnyomtatas`
@@ -53,35 +52,43 @@ composer install
 composer install --no-dev --optimize-autoloader
 ```
 
-## MySQL adatbázis — `oklevelnyomtatas`
+## MySQL — adatbázisnév és séma (kétféle módszer)
 
-**Adatbázis neve (kötelező példa telepítéshez):** `oklevelnyomtatas`
+**Adatbázis neve (példa telepítéshez):** `oklevelnyomtatas`
 
-**Séma forrása (táblák + induló adatok):**
+A táblák **egy** módszerrel jönnek létre. Ne futtasd egymás után mindkettőt ugyanarra az adatbázisra (duplikált táblák / hiba).
+
+| | **1. SQL dump (import)** | **2. CakePHP migráció** |
+|---|--------------------------|-------------------------|
+| **Művelet** | `config/schema/oklevelnyomtatas.sql` futtatása | `php bin\cake.php migrations migrate` |
+| **Futtató** | MySQL root vagy jogosult felhasználó | Projekt gyökér, CLI |
+| **Előfeltétel** | MySQL elérhető | MySQL + létező **`config/app_local.php`** (következő szakasz) + üres `oklevelnyomtatas` DB (migrációnál) |
+| **Kimenet** | DB + táblák + indexek/FK; a dump **induló adatokat** is tartalmazhat | Üres táblák; adat **Access importból** |
+| **Hibakezelés** | duplicate table → üres cél-DB; jog → `GRANT` | kapcsolódási hiba → `app_local.php`; már migrált → `migrations status` |
+
+**Döntés:** phpMyAdmin / egy fájl → **SQL**. Üres DB + verziókövetett séma CakePHP-ből → **migráció**. A két forrás szerkezete megegyezik (`20261125100000_CreateSmokeTimerTables.php` ≡ SQL táblák).
+
+### 1. SQL import
 
 | Mező | Érték |
 |------|--------|
 | **Fájl** | `config/schema/oklevelnyomtatas.sql` |
-| **Tartalom** | `CREATE DATABASE`, `USE oklevelnyomtatas`, táblák, indexek, induló adatok (dump) |
+| **Tartalom** | `CREATE DATABASE`, `USE oklevelnyomtatas`, táblák, indexek, FK, induló adatok |
 
-**Művelet:** SQL fájl futtatása  
-**Futtató:** MySQL root vagy jogosult felhasználó  
-**Munkakönyvtár:** projekt gyökér (a fájl abszolút útvonala számít)  
-**Kimenet:** létező `oklevelnyomtatas` adatbázis, alkalmazás által használt táblák  
-**Hibakezelés:** „database exists” / duplicate → üres DB-n futtasd; jog hiánya → `GRANT`
+**phpMyAdmin:** [http://localhost/phpmyadmin](http://localhost/phpmyadmin) → **Import** → `D:\www\oklevelnyomtatas\config\schema\oklevelnyomtatas.sql` → **Go**
 
-### phpMyAdmin
-
-1. [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
-2. **Import** → fájl: `D:\www\oklevelnyomtatas\config\schema\oklevelnyomtatas.sql` → **Go**
-
-### `mysql` CLI (XAMPP)
+**`mysql` CLI (XAMPP):**
 
 ```bat
 C:\xampp\mysql\bin\mysql.exe -u root < D:\www\oklevelnyomtatas\config\schema\oklevelnyomtatas.sql
 ```
 
-Opcionálisan **csak** üres adatbázis (ha a táblákat máshonnan töltöd — nem ajánlott):
+### 2. Migráció
+
+**Művelet:** üres adatbázis + migráció futtatása  
+**Munkakönyvtár:** `D:\www\oklevelnyomtatas`
+
+Előbb (ha nincs még DB):
 
 ```sql
 CREATE DATABASE oklevelnyomtatas
@@ -89,7 +96,14 @@ CREATE DATABASE oklevelnyomtatas
   COLLATE utf8mb4_unicode_ci;
 ```
 
-Opcionálisan külön felhasználó (ajánlott élesben):
+Majd:
+
+```bat
+php bin\cake.php migrations migrate
+php bin\cake.php migrations status
+```
+
+### Közös — MySQL felhasználó (élesben ajánlott)
 
 ```sql
 CREATE USER 'oklevelnyomtatas'@'localhost' IDENTIFIED BY 'erős-jelszó';
@@ -97,7 +111,9 @@ GRANT ALL PRIVILEGES ON oklevelnyomtatas.* TO 'oklevelnyomtatas'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-A `config/app_local.php` `Datasources.default.database` mezője legyen **`oklevelnyomtatas`** (vagy az általad használt név, ha szándékosan más).
+A `config/app_local.php` `Datasources.default.database` mezője legyen **`oklevelnyomtatas`**.
+
+**Sorrend új telepítésnél:** `composer install` → **`app_local.php`** → séma (SQL **vagy** migrate) → Apache / cake server.
 
 ## CakePHP helyi konfiguráció
 
@@ -132,9 +148,12 @@ vagy környezeti változó: `APP_FULL_BASE_URL=http://oklevel.local`
 
 ## Adatbázis séma — ellenőrzés
 
-Telepítés után phpMyAdmin-ban az `oklevelnyomtatas` adatbázisban látszanak a táblák (pl. `countries`, `clubs`, `people`, `competitions`, `teams`, `registrations`).
+Telepítés után phpMyAdmin-ban az `oklevelnyomtatas` adatbázisban látszanak a táblák (pl. `countries`, `clubs`, `people`, `competitions`, `teams`, `registrations`, `smoke_timer_settings`).
 
-**CakePHP migráció** (`php bin\cake.php migrations migrate`) **nem** része az alap telepítésnek, ha a fenti SQL import sikeres. A fejlesztői ágon későbbi séma-változás lehet külön migrációs fájlban — ilyenkor a fejlesztői changelog / issue szerint járj el.
+- **SQL út:** a `cake_migrations` tábla is lehet a dumpban (korábbi migrate nyoma) — ez normális.
+- **Migráció út:** a `cake_migrations` táblát a plugin hozza létre; `migrations status` → `up`.
+
+Későbbi verziófrissítésnél a **release megjegyzése** vagy a changelog mondja meg: új SQL dump, vagy `php bin\cake.php migrations migrate` a hiányzó fájlokra.
 
 ## Írható mappák
 
@@ -266,7 +285,7 @@ A **SmokeTimer** asztali program Access-ben készíti / karbantartja az adatbáz
 
 1. `composer install` kész
 2. `app_local.php` + MySQL működik (`database` = `oklevelnyomtatas`)
-3. `config/schema/oklevelnyomtatas.sql` importálva
+3. Séma kész — **SQL import** *vagy* **`migrations migrate`**
 4. Apache → `http://oklevel.local/` (vagy `php bin\cake.php server`)
 5. **Access import:** feltöltés → **Import MySQL-be** (új `access_id` sorok)
 6. **Oklevél generálás**, **Eredménylisták**, **Generált PDF-ek**
@@ -278,7 +297,8 @@ A **SmokeTimer** asztali program Access-ben készíti / karbantartja az adatbáz
 | „Nem sikerült megnyitni az Access fájlt ODBC-n” | Nincs ACE, vagy 32/64 bit eltérés, vagy `pdo_odbc` ki van kapcsolva |
 | Feltöltés üres / hiba kód 1 | `upload_max_filesize` / `post_max_size` túl kicsi a `php.ini`-ben |
 | Host hiba / rossz linkek | `App.fullBaseUrl` nem egyezik a böngésző címmel |
-| SQL import hiba | Rossz MySQL jog, félbeszakadt import, duplicate táblák |
+| SQL import hiba | Rossz MySQL jog, félbeszakadt import, duplicate táblák (már migrált vagy részben importált DB) |
+| Migráció hiba | Hiányzó `app_local.php`, rossz datasource, üres helyett hibás DB név |
 | Backup / törlés sikertelen | Access vagy más program zárolja a `.accdb`-t — zárd be |
 
 ## Kapcsolódó konfigurációs fájlok
@@ -297,8 +317,8 @@ git pull
 composer install
 ```
 
-Ha a változás séma-módosítást is hoz, kövesd a release / fejlesztői utasítást (új SQL dump vagy migráció).
+Ha a változás séma-módosítást is hoz: a **GitHub Release** leírása szerint új SQL dump import *vagy* `php bin\cake.php migrations migrate`.
 
-**Release / stabil:** `git checkout main` és a GitHub **Releases** oldala, amikor elérhető.
+**Verzió:** `git pull` a `main` ágon, vagy release tag kiválasztása a **Releases** oldalon.
 
 Apache újraindítás csak `php.ini` / vhost módosítás után szükséges.

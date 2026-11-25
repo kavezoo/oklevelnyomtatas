@@ -1,6 +1,6 @@
 - **Típus:** üzemeltetői
 - **Alkalmazás:** oklevelnyomtatas
-- **Verzió:** 1.0
+- **Verzió:** 1.1
 - **Dátum:** 2026-11-25
 - **Állapot:** érvényes
 - **Felelős:** oklevelnyomtatas fejlesztés
@@ -8,7 +8,7 @@
 # Használat — rövid áttekintés
 
 **Tároló:** [https://github.com/kavezoo/oklevelnyomtatas.git](https://github.com/kavezoo/oklevelnyomtatas.git)  
-**Telepítés:** lásd [telepites-es-hasznalat-xampp.md](telepites-es-hasznalat-xampp.md). Fejlesztéshez `dev` ág; a végleges használható változat később a `main` ágon és release formájában érhető el.
+**Telepítés:** lásd [telepites-gyors-utmutato.md](telepites-gyors-utmutato.md) vagy [telepites-es-hasznalat-xampp.md](telepites-es-hasznalat-xampp.md). A repó **`main`** ága az éles, telepíthető forrás; kiadások a GitHub **Releases** oldalon.
 
 ## Fő menüpontok
 
@@ -41,4 +41,4 @@
 ## Megjegyzések
 
 - Az aktív Access fájl zárolva van, amíg az ODBC kapcsolat nyitva — feltöltés előtt zárd be a Microsoft Access programot, ha a régi fájlt zárolja.
-- A `dev` ág funkciói változhatnak; éles üzemhez a későbbi `main` + GitHub release ajánlott.
+- Verziófrissítéshez használd a `main` ágat vagy a kijelölt GitHub release-t; séma-változásnál SQL újraimport vagy `migrations migrate` a release megjegyzése szerint.

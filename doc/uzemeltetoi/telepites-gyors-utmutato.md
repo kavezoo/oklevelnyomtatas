@@ -1,6 +1,6 @@
 - **Típus:** üzemeltetői
 - **Alkalmazás:** oklevelnyomtatas
-- **Verzió:** 1.0
+- **Verzió:** 1.1
 - **Dátum:** 2026-11-25
 - **Állapot:** érvényes
 - **Felelős:** fejlesztői csapat
@@ -37,8 +37,9 @@ Opcionális: [7-Zip](https://www.7-zip.org/download.html) — ha nem Git-tel tö
 cd D:\www
 git clone https://github.com/kavezoo/oklevelnyomtatas.git
 cd oklevelnyomtatas
-git checkout dev
 ```
+
+A repó **`main`** ága az éles forrás; később opcionálisan letölthető GitHub **Release** is.
 
 **Mappa név:** tetszőleges (pl. `D:\www\oklevelnyomtatas`). A dokumentációban ez az útvonal szerepel.
 
@@ -55,36 +56,7 @@ Ha a `composer` parancs nem található: telepítsd a Composer Setup-ot, majd ny
 
 ---
 
-## 4. lépés — Adatbázis: `oklevelnyomtatas`
-
-Az alkalmazás **MySQL/MariaDB** adatbázis neve: **`oklevelnyomtatas`**.
-
-A teljes szerkezet (és a dump szerinti induló adatok) egy fájlban van:
-
-```text
-config/schema/oklevelnyomtatas.sql
-```
-
-### 4a) phpMyAdmin-mal
-
-1. Böngésző: [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
-2. **Import** (vagy előbb üres adatbázis létrehozása nem kötelező — a SQL elején van `CREATE DATABASE`).
-3. Fájl kiválasztása: `D:\www\oklevelnyomtatas\config\schema\oklevelnyomtatas.sql`
-4. **Go** / **Indítás** — várj, amíg lefut (nagy fájl esetén több perc).
-
-### 4b) Parancssorból (XAMPP MySQL)
-
-```text
-C:\xampp\mysql\bin\mysql.exe -u root < D:\www\oklevelnyomtatas\config\schema\oklevelnyomtatas.sql
-```
-
-Alap XAMPP-on a root jelszó üres. Ha van jelszó: `-p`.
-
-**Megjegyzés:** CakePHP **migráció** nem kötelező telepítéshez; a séma forrása a fenti SQL. (Fejlesztői környezetben később lehet `bin/cake migrations migrate` — csak ha a csapat külön jelzi.)
-
----
-
-## 5. lépés — Helyi konfiguráció
+## 4. lépés — Helyi konfiguráció
 
 ```text
 cd D:\www\oklevelnyomtatas
@@ -110,6 +82,60 @@ Opcionális — SmokeTimer Access forrás (`Import` menü):
 
 ---
 
+## 5. lépés — Adatbázis séma: `oklevelnyomtatas`
+
+Az alkalmazás MySQL/MariaDB adatbázis neve: **`oklevelnyomtatas`**.
+
+**Válassz egy módszert** (elég az egyik; ugyanarra az adatbázisra ne futtasd mindkettőt):
+
+| | **A) SQL import** | **B) CakePHP migráció** |
+|---|-------------------|-------------------------|
+| **Neki való** | phpMyAdmin-barát, „egy kattintás”, induló adatok a dumpból | Parancssoros, üres táblák, adat Access importból |
+| **Fájl / parancs** | `config/schema/oklevelnyomtatas.sql` | `php bin\cake.php migrations migrate` |
+| **Előfeltétel** | MySQL fut | MySQL fut + kész **`config/app_local.php`** (4. lépés) |
+| **Adat** | Dumpban lévő országok, klubok, stb. (ha benne vannak) | Üres táblák — versenyadat **Access import** után |
+
+### A) SQL import
+
+Fájl:
+
+```text
+config/schema/oklevelnyomtatas.sql
+```
+
+**phpMyAdmin:** [http://localhost/phpmyadmin](http://localhost/phpmyadmin) → **Import** → a fenti fájl → **Go**.
+
+**Parancssor (XAMPP):**
+
+```text
+C:\xampp\mysql\bin\mysql.exe -u root < D:\www\oklevelnyomtatas\config\schema\oklevelnyomtatas.sql
+```
+
+Alap XAMPP-on a root jelszó üres. Ha van jelszó: `-p`.
+
+### B) Migráció (CakePHP Migrations)
+
+1. Hozd létre az üres adatbázist (ha még nincs), pl. phpMyAdmin-ban vagy:
+
+```sql
+CREATE DATABASE oklevelnyomtatas
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+```
+
+2. Projekt gyökérben:
+
+```text
+cd D:\www\oklevelnyomtatas
+php bin\cake.php migrations migrate
+```
+
+Státusz ellenőrzés: `php bin\cake.php migrations status`.
+
+Séma forrása: `config/Migrations/20261125100000_CreateSmokeTimerTables.php`.
+
+---
+
 ## 6. lépés — Írható mappák
 
 PowerShell (projekt gyökérben):
@@ -122,7 +148,7 @@ Windows jogosultság: a futtató felhasználónak írnia kell a `tmp`, `logs`, `
 
 ---
 
-## 7. lépés — Alkalmazás megnyitása böngészőben
+## 7. lépés — Alkalmazás indítása böngészőben
 
 ### A) Beépített PHP szerver (leggyorsabb teszt)
 
@@ -166,8 +192,8 @@ Használati részletek: [hasznalat.md](hasznalat.md).
 |---|--------|----------|
 | 1 | ☐ | Apache + MySQL fut (XAMPP) |
 | 2 | ☐ | `composer install` lefutott |
-| 3 | ☐ | `config/schema/oklevelnyomtatas.sql` importálva |
-| 4 | ☐ | `config/app_local.php` → `database` = `oklevelnyomtatas` |
+| 3 | ☐ | `config/app_local.php` → `database` = `oklevelnyomtatas` |
+| 4 | ☐ | Séma kész (**SQL import** *vagy* **migrations migrate**) |
 | 5 | ☐ | `tmp`, `logs`, `webroot/files` írható |
 | 6 | ☐ | Böngészőben megnyílik a kezdőlap |
 | 7 | ☐ | (Importhoz) ACE ODBC telepítve, bitness = PHP bitness |
