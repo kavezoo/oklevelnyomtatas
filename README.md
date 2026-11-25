@@ -6,28 +6,29 @@ Webes alkalmazás pipázóverseny-adatokból **PDF oklevelek** és **eredményli
 
 **Forráskód:** [https://github.com/kavezoo/oklevelnyomtatas.git](https://github.com/kavezoo/oklevelnyomtatas.git)
 
-## Ágak és kiadás
+## Forrás és kiadás
 
-| Ág | Állapot |
-|----|---------|
-| **`dev`** | Aktuális fejlesztés — innen telepíts most |
-| **`main`** | Későbbi, **végleges, használható** változat; innen lesz majd a **release** is |
+| Mező | Érték |
+|------|--------|
+| **Alapértelmezett ág** | `main` — éles, telepíthető állapot |
+| **Első release** | A repóba feltöltött verzióból készül; a kiadások a GitHub **Releases** oldalon jelennek meg |
 
 ```bash
 git clone https://github.com/kavezoo/oklevelnyomtatas.git
 cd oklevelnyomtatas
-git checkout dev
 ```
+
+Opcionálisan címkézett kiadás: GitHub **Releases** → letöltés, vagy `git checkout` a release címkére.
 
 ## Dokumentáció
 
 | Dokumentum | Cél |
 |------------|-----|
-| [**Egyszerű telepítés**](Doc/uzemeltetoi/telepites-gyors-utmutato.md) | Lépésről lépésre: letöltések, `oklevelnyomtatas.sql`, indítás böngészőben |
+| [**Egyszerű telepítés**](Doc/uzemeltetoi/telepites-gyors-utmutato.md) | Lépésről lépésre: letöltések, séma (**SQL** vagy **migráció**), indítás böngészőben |
 | [Telepítés és használat (XAMPP)](Doc/uzemeltetoi/telepites-es-hasznalat-xampp.md) | Részletes: Composer, MySQL, Apache, lokális domain, Access ODBC, php.ini |
 | [Használat — rövid áttekintés](Doc/uzemeltetoi/hasznalat.md) | Tipikus munkafolyamat a telepítés után (import, oklevelek, PDF) |
 
-**Adatbázis:** MySQL/MariaDB név `oklevelnyomtatas` — séma: `config/schema/oklevelnyomtatas.sql` (import után futtatható az alkalmazás).
+**Adatbázis:** MySQL/MariaDB név `oklevelnyomtatas` — séma **kétféleképpen:** `config/schema/oklevelnyomtatas.sql` import, vagy `php bin/cake.php migrations migrate` (részletek a telepítési doksiban; a két módszert ne kombináld ugyanazon az üres/félkész adatbázison).
 
 ## Rövid funkciók
 
